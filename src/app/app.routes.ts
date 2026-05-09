@@ -4,12 +4,21 @@ import { Accounts } from './accounts/accounts';
 import { NgModule } from '@angular/core';
 import { NewCustomer } from './new-customer/new-customer';
 import { CustomerAccount } from './customer-account/customer-account';
+import {Login} from './login/login';
+import { AdminTemplate } from './admin-template/admin-template';
 
 export const routes: Routes = [
-  {path:"customers", component : Customers},
-  {path:"accounts", component : Accounts  },
-  {path:"new-customer", component : NewCustomer},
-  {path:"customer-account/:id", component : CustomerAccount},
+
+  {path:"admin", component : AdminTemplate, children : [
+      {path:"customers", component : Customers},
+      {path:"accounts", component : Accounts  },
+      {path:"new-customer", component : NewCustomer},
+      {path:"customer-account/:id", component : CustomerAccount},
+      {path:"", redirectTo:"customers", pathMatch:"full"},
+    ]  },
+
+  {path:"login", component : Login},
+  {path:"", redirectTo:"/login", pathMatch:"full"},
 
 ];
 @NgModule({
