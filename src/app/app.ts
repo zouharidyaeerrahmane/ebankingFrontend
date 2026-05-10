@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit, signal } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
+import { Auth } from './services/auth';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,11 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.css',
 })
 
-export class App {
+export class App implements OnInit{
   protected readonly title = signal('ebanking_frontend');
+  constructor(private router: Router, private auth: Auth) {
+  }
+  ngOnInit(): void {
+    this.auth.loadJwtTokenFromLocalStorage();
+  }
 }

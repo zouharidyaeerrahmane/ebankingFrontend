@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {jwtDecode} from 'jwt-decode';
+import { Token } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class Auth {
   accessToken! : string;
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient , private router : Router) { }
 
   public login(username: string, password: string) {
 
@@ -35,5 +36,22 @@ export class Auth {
     let jwtDecoder: any = jwtDecode(this.accessToken);
     this.username = jwtDecoder.sub;
     this.roles = jwtDecoder.scope;
+    window.localStorage.setItem('accessToken', this.accessToken);
+  }
+
+  logout() {
+    this.isAuthenticated = false;
+    this.accessToken = "";
+    this.username = "";
+    this.roles = "";
+
+  }
+
+  loadJwtTokenFromLocalStorage() {
+    let token = window.localStorage.getItem('accessToken');
+    if (token) {
+        this.loadProfile({ accessToken: token });
+        this.router.navigateByUrl('/admin/customers');
+    }
   }
 }
